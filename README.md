@@ -1,57 +1,72 @@
-# Sterling_Hospital
-Hospital Management System
+# Sterling Hospital Management System
 
-Technical requirement:
-1. Please develop API in .net core for below requirement.
-2. The architecture should be a multi-tiered service based.
-3. You can use the entity framework code first approach but it is not mandatory.
-4. Please provide compliable and functioning code.
-We have a Sterling Hospital who has doctors, nurses & Receptionists. We want to maintain 
-all the appointment schedules for doctors with patients & duties of nurses on a daily basis.
-Functional requirement:
-1). There should be 4 categories of users in the application.
- Doctor
- Nurse
- Receptionist
- Patients
-2). Following are the minimum fields for all the users.
- First name
- Last name
- Email (Optional)
- Phone number
- Date of Birth
- Sex
- Address
- Postal Code (Optional)
-3). There can be only 3 doctors who are experts in brain surgery, physiotherapist & Eye 
-specialist. 10 Nurses and 2 Receptionists.
-4). Following are the minimum fields for Appointment details.
- PatientId
- ScheduleStartTime
- ScheduleEndTime
- PatientProblem
- Description (Optional)
- Status (Scheduled/ Cancelled/ Rescheduled)
- ConsultDoctor (brain surgery, physiotherapist & Eye specialist)
- IsOnlineConsult
-5). Doctors should have the following functionality.
- He/she should be able to login using email id and password.
- He/she can check all the appointments on the dashboard & can reschedule or 
-cancel as per availability.
- He/she diagnoses the Patient problem and assigns duties to nurses to admit cases.
-6). Nurses should have the following functionality.
- He/she should be able to login using email id and password.
- He/she can see all duties on the dashboard with each admitted patient's respective 
-time.
-7). Receptionists should have the following functionality.
- He/she should be able to login using email id and password.
- He/she has rights to create a patient profile with patient id & password.
- Patient Id should have Sterling_PatientNumber and Password should have 
-FirstNameBirthDate
- He/she has rights to schedule every patient appointment as per consult doctor 
-inquiry & availability slot by call/hospital visit.
-8). Patients should have the following functionality.
- He/she should be able to login using email id and password.
- He/she should be able to track current appointment schedules with status on 
-Dashboard.
- He/she can see all previous appointments history.
+## Technical Requirements:
+
+1. Develop API in .NET Core.
+2. Implement a multi-tiered service-based architecture.
+3. Entity Framework code-first approach is preferred but not mandatory.
+4. Provide compliable and functioning code.
+
+## Overview:
+
+Sterling Hospital requires a comprehensive Hospital Management System to manage appointment schedules for doctors, nurse duties, and patient information efficiently.
+
+## Functional Requirements:
+
+1. **User Categories:**
+   - Doctor
+   - Nurse
+   - Receptionist
+   - Patient
+
+2. **User Information:**
+   - First Name
+   - Last Name
+   - Email (Optional)
+   - Phone Number
+   - Date of Birth
+   - Sex
+   - Address
+   - Postal Code (Optional)
+
+3. **Staff Distribution:**
+   - 3 Doctors specialized in:
+     - Brain Surgery
+     - Physiotherapy
+     - Eye Care
+   - 10 Nurses
+   - 2 Receptionists
+
+4. **Appointment Details:**
+   - Patient ID
+   - Schedule Start Time
+   - Schedule End Time
+   - Patient Problem
+   - Description (Optional)
+   - Status (Scheduled/Cancelled/Rescheduled)
+   - Consult Doctor
+   - Is Online Consultation
+
+5. **Doctor Functionality:**
+   - Login using email and password
+   - View all appointments on the dashboard
+   - Reschedule or cancel appointments as necessary
+   - Diagnose patient problems and assign nurse duties
+
+6. **Nurse Functionality:**
+   - Login using email and password
+   - View duties on the dashboard with patient times
+
+7. **Receptionist Functionality:**
+   - Login using email and password
+   - Create patient profiles with ID and password
+   - Patient ID format: Sterling_PatientNumber
+   - Password format: FirstNameBirthDate
+   - Schedule patient appointments based on doctor availability
+
+8. **Patient Functionality:**
+   - Login using email and password
+   - Track current appointment schedules and statuses on the dashboard
+   - View previous appointment history
+
+For further development and implementation details, refer to the technical requirements and functional specifications outlined above.
