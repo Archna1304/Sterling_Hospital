@@ -1,0 +1,15 @@
+C:\Users\a1\source\repos\Sterling_Hospital\Service_Layer\bin\Debug\net6.0\Service_Layer.deps.json
+C:\Users\a1\source\repos\Sterling_Hospital\Service_Layer\bin\Debug\net6.0\Service_Layer.dll
+C:\Users\a1\source\repos\Sterling_Hospital\Service_Layer\bin\Debug\net6.0\Service_Layer.pdb
+C:\Users\a1\source\repos\Sterling_Hospital\Service_Layer\bin\Debug\net6.0\DataAccess_Layer.dll
+C:\Users\a1\source\repos\Sterling_Hospital\Service_Layer\bin\Debug\net6.0\DataAccess_Layer.pdb
+C:\Users\a1\source\repos\Sterling_Hospital\Service_Layer\obj\Debug\net6.0\Service_Layer.csproj.AssemblyReference.cache
+C:\Users\a1\source\repos\Sterling_Hospital\Service_Layer\obj\Debug\net6.0\Service_Layer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\a1\source\repos\Sterling_Hospital\Service_Layer\obj\Debug\net6.0\Service_Layer.AssemblyInfoInputs.cache
+C:\Users\a1\source\repos\Sterling_Hospital\Service_Layer\obj\Debug\net6.0\Service_Layer.AssemblyInfo.cs
+C:\Users\a1\source\repos\Sterling_Hospital\Service_Layer\obj\Debug\net6.0\Service_Layer.csproj.CoreCompileInputs.cache
+C:\Users\a1\source\repos\Sterling_Hospital\Service_Layer\obj\Debug\net6.0\Service_Layer.csproj.CopyComplete
+C:\Users\a1\source\repos\Sterling_Hospital\Service_Layer\obj\Debug\net6.0\Service_Layer.dll
+C:\Users\a1\source\repos\Sterling_Hospital\Service_Layer\obj\Debug\net6.0\refint\Service_Layer.dll
+C:\Users\a1\source\repos\Sterling_Hospital\Service_Layer\obj\Debug\net6.0\Service_Layer.pdb
+C:\Users\a1\source\repos\Sterling_Hospital\Service_Layer\obj\Debug\net6.0\ref\Service_Layer.dll
