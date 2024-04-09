@@ -1,14 +1,12 @@
 ﻿using DataAccess_Layer.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service_Layer.DTO;
 using Service_Layer.Interface;
 
 namespace Sterling_Hospital.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class NurseController : ControllerBase
+    //[Authorize(Roles = "Nurse")]
+    public class NurseController : BaseController
     {
         #region prop
         private readonly INurseService _nurseService;

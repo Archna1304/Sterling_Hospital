@@ -1,15 +1,12 @@
 ﻿using DataAccess_Layer.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service_Layer.DTO;
 using Service_Layer.Interface;
 
 namespace Sterling_Hospital.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-
-    public class DoctorController : ControllerBase
+    //[Authorize(Roles = "Doctor")]
+    public class DoctorController : BaseController
     {
         #region Prop
         private readonly IDoctorService _doctorService;
@@ -74,16 +71,14 @@ namespace Sterling_Hospital.Controllers
         [HttpDelete("CancelAppointments/{appointmentId}")]
         public async Task<ActionResult<ResponseDTO>> CancelAppointment(int appointmentId)
         {
-            try
+            var response = await _doctorService.CancelAppointment(appointmentId);
+
+            return response.Status switch
             {
-                bool result = await _doctorService.CancelAppointment(appointmentId);
-                return result ? Ok(new ResponseDTO { Status = 200, Message = "Appointment canceled successfully." }) :
-                                BadRequest(new ResponseDTO { Status = 400, Message = "Failed to cancel appointment. Appointment not found." });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ResponseDTO { Status = 500, Message = "An error occurred while canceling appointment.", Error = ex.Message });
-            }
+                200 => Ok(new ResponseDTO { Status = 200, Message = "Appointment canceled successfully." }),
+                400 => BadRequest(new ResponseDTO { Status = 400, Message = "Failed to cancel appointment. Appointment not found." }),
+                _ => StatusCode(500, new ResponseDTO { Status = 500, Message = "An error occurred while canceling appointment.", Error = response.Error }),
+            };
         }
         #endregion
 

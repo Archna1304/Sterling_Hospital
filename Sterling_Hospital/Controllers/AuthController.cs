@@ -6,9 +6,8 @@ using Service_Layer.Interface;
 
 namespace Sterling_Hospital.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
+
+    public class AuthController : BaseController
     {
         #region prop
         private readonly IAuthService _authService;
@@ -24,6 +23,7 @@ namespace Sterling_Hospital.Controllers
         //API's
 
         #region Register User
+        //[Authorize(Roles = "Doctor")]
         [HttpPost("RegisterUser")]
         public async Task<IActionResult> Register(RegisterDTO registerDTO)
         {
@@ -33,6 +33,7 @@ namespace Sterling_Hospital.Controllers
         #endregion
 
         #region Register Doctor
+        //[Authorize(Roles = "Doctor")]
         [HttpPost("RegisterDoctor")]
         public async Task<IActionResult> RegisterDoctor([FromBody] RegisterDoctorDTO registerDoctorDTO)
         {

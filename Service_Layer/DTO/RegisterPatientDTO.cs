@@ -11,6 +11,6 @@
         public string Address { get; set; }
         public string? PostalCode { get; set; }
         public string Role { get; } = "Patient";
-        //public string Password { get;}
+       
     }
 }

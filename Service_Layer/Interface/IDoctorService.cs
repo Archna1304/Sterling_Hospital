@@ -6,7 +6,7 @@ namespace Service_Layer.Interface
     {
         Task<List<dynamic>> GetDoctorAppointments(string specialization, int doctorId);
         Task<ResponseDTO> RescheduleAppointment(ChangeAppointmentDTO changeAppointmentDTO);
-        Task<bool> CancelAppointment(int appointmentId);
+        Task<ResponseDTO> CancelAppointment(int appointmentId);
         Task<bool> AssignDutyToNurse(int appointmentId, int nurseId);
     }
 }

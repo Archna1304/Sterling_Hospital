@@ -4,6 +4,8 @@
     {
         public int AppointmentId { get; set; }
         public DateTime NewAppointmentStartTime { get; set; }
+
+        public DateTime NewAppointmentEndTime { get; set; }
         public string NewConsultingDoctor { get; set; }
     }
 }

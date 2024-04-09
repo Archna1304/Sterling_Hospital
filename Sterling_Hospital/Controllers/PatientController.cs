@@ -3,9 +3,8 @@ using Service_Layer.Service;
 
 namespace Sterling_Hospital.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PatientController : ControllerBase     
+    //[Authorize(Roles = "Patient")]
+    public class PatientController : BaseController     
     {
 
         #region Prop

@@ -1,15 +1,13 @@
 ﻿using DataAccess_Layer.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service_Layer.DTO;
 using Service_Layer.Interface;
-using Service_Layer.Service;
 
 namespace Sterling_Hospital.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ReceptionistController : ControllerBase
+    //[Authorize(Roles = "Receptionist")]
+    public class ReceptionistController : BaseController
     {
 
         #region prop

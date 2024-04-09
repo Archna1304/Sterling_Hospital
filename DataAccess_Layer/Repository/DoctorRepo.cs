@@ -46,22 +46,22 @@ namespace DataAccess_Layer.Repository
         #endregion
 
         #region Check Availability
-
-        public async Task<bool> CheckAvailability(int doctorId, DateTime appointmentTime)
+        public async Task<bool> CheckAvailability(int doctorId, string consultingDoctor, DateTime appointmentTime)
         {
+            // Your implementation to check availability in the database
             return !(await _context.AppointmentDetails
-                .AnyAsync(a => a.DoctorId == doctorId && a.ScheduleStartTime <= appointmentTime && a.ScheduleEndTime >= appointmentTime));
+                .AnyAsync(a => a.DoctorId == doctorId && a.ConsultingDoctor == consultingDoctor && a.ScheduleStartTime <= appointmentTime && a.ScheduleEndTime >= appointmentTime));
         }
-
         #endregion
 
         #region Reschedule Appointment
-        public async Task<bool> RescheduleAppointment(int appointmentId, DateTime newStartTime, string newConsultingDoctor)
+        public async Task<bool> RescheduleAppointment(int appointmentId, DateTime newStartTime, DateTime newEndTime, string newConsultingDoctor)
         {
             var appointment = await _context.AppointmentDetails.FindAsync(appointmentId);
             if (appointment != null)
             {
                 appointment.ScheduleStartTime = newStartTime;
+                appointment.ScheduleEndTime = newEndTime;
                 appointment.ConsultingDoctor = newConsultingDoctor; // Update consulting doctor
                 await _context.SaveChangesAsync();
                 return true;
@@ -70,6 +70,28 @@ namespace DataAccess_Layer.Repository
         }
         #endregion
 
+        #region Get Appointment by ID
+        public async Task<AppointmentDetails> GetAppointmentById(int appointmentId)
+        {
+            return await _context.AppointmentDetails.FindAsync(appointmentId);
+        }
+        #endregion
+
+        #region Update Appointment
+        public async Task<bool> UpdateAppointment(AppointmentDetails appointment)
+        {
+            try
+            {
+                _context.AppointmentDetails.Update(appointment);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
 
         #region Cancel Appointment
         public async Task<bool> CancelAppointment(int appointmentId)
