@@ -92,20 +92,24 @@ namespace DataAccess_Layer.Repository
             }
         }
         #endregion
-
         #region Cancel Appointment
         public async Task<bool> CancelAppointment(int appointmentId)
         {
             var appointment = await _context.AppointmentDetails.FindAsync(appointmentId);
             if (appointment != null)
             {
-                _context.AppointmentDetails.Remove(appointment);
+                // Update appointment status to "Cancelled"
+                appointment.Status = DataAccess_Layer.Models.Status.Cancelled;
+
+                // Save changes to the database
                 await _context.SaveChangesAsync();
+
                 return true;
             }
             return false;
         }
         #endregion
+
 
         #region Assign Duty to Nurse
         public async Task<bool> AssignDutyToNurse(int appointmentId, int nurseId)

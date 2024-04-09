@@ -1,11 +1,12 @@
 ﻿using DataAccess_Layer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service_Layer.DTO;
 using Service_Layer.Interface;
 
 namespace Sterling_Hospital.Controllers
 {
-    //[Authorize(Roles = "Nurse")]
+    [Authorize(Roles = "Nurse")]
     public class NurseController : BaseController
     {
         #region prop

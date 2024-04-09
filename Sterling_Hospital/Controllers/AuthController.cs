@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Service_Layer.DTO;
 using Service_Layer.Interface;
 using Service_Layer.Services;
@@ -23,6 +24,7 @@ namespace Sterling_Hospital.Controllers
         //API's
 
         #region Register User
+        [Authorize(Roles = "Doctor")]
         [HttpPost("RegisterUser")]
         public async Task<IActionResult> Register(RegisterDTO registerDTO)
         {
@@ -38,6 +40,7 @@ namespace Sterling_Hospital.Controllers
         #endregion
 
         #region Register Doctor
+        [Authorize(Roles = "Doctor")]
         [HttpPost("RegisterDoctor")]
         public async Task<IActionResult> RegisterDoctor(RegisterDoctorDTO registerDoctorDTO)
         {

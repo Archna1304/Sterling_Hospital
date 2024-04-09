@@ -102,32 +102,21 @@ namespace Service_Layer.Service
                 appointment.Status = DataAccess_Layer.Models.Status.Cancelled;
                 await _doctorRepo.UpdateAppointment(appointment);
 
-                if (appointment != null && appointment.Patient != null)
+                var emailDTO = new EmailDTO
                 {
-                    var emailDTO = new EmailDTO
-                    {
-                        Email = appointment.Patient.Email,
-                        Subject = "Appointment Cancellation",
-                        Body = $"Dear {appointment.Patient.FirstName} {appointment.Patient.LastName},<br><br> Your appointment scheduled for {appointment.ScheduleStartTime} has been cancelled."
-                    };
+                    Email = appointment.Patient.Email,
+                    Subject = "Appointment Cancellation",
+                    Body = $"Dear {appointment.Patient.FirstName} {appointment.Patient.LastName},<br><br> Your appointment scheduled for {appointment.ScheduleStartTime} has been cancelled."
+                };
 
-                    // Send the email
-                    _emailService.SendEmailAsync(emailDTO);
+                // Send the email
+                _emailService.SendEmailAsync(emailDTO);
 
-                    return new ResponseDTO
-                    {
-                        Status = 200,
-                        Message = "Appointment cancelled successfully."
-                    };
-                }
-                else
+                return new ResponseDTO
                 {
-                    return new ResponseDTO
-                    {
-                        Status = 400,
-                        Message = "Appointment or patient is null. Cannot send email notification."
-                    };
-                }
+                    Status = 200,
+                    Message = "Appointment cancelled successfully."
+                };
             }
             catch (Exception ex)
             {
