@@ -1,5 +1,5 @@
 ﻿using DataAccess_Layer.Interface;
-using DataAccess_Layer.Models;
+using Service_Layer.DTO;
 using Service_Layer.Interface;
 
 namespace Service_Layer.Service
@@ -19,19 +19,36 @@ namespace Service_Layer.Service
 
         //Methods
 
-        #region Get All Appoinements
-        public async Task<List<AppointmentDetails>> GetAllAppointments()
+        #region Get Doctor Appointments
+        public async Task<List<dynamic>> GetDoctorAppointments(string specialization, int doctorId)
         {
-            return await _doctorRepo.GetAllAppointments();
+            return await _doctorRepo.GetDoctorAppointments(specialization, doctorId);
         }
         #endregion
 
         #region Reschedule Appointment
-        public async Task<bool> RescheduleAppointment(int appointmentId, DateTime newStartTime)
-        {
-            return await _doctorRepo.RescheduleAppointment(appointmentId, newStartTime);
-        }
-        #endregion
+            public async Task<ResponseDTO> RescheduleAppointment(ChangeAppointmentDTO changeAppointmentDTO)
+            {
+                try
+                {
+                    bool result = await _doctorRepo.RescheduleAppointment(changeAppointmentDTO.AppointmentId, changeAppointmentDTO.NewAppointmentStartTime, changeAppointmentDTO.NewConsultingDoctor);
+                    if (result)
+                    {
+                        return new ResponseDTO { Status = 200, Message = "Appointment rescheduled successfully." };
+                    }
+                    else
+                    {
+                        return new ResponseDTO { Status = 400, Message = "Failed to reschedule appointment. Appointment not found." };
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return new ResponseDTO { Status = 500, Message = "An error occurred while rescheduling appointment.", Error = ex.Message };
+                }
+            }
+            #endregion
+
+
 
         #region Cancel Appointments
         public async Task<bool> CancelAppointment(int appointmentId)

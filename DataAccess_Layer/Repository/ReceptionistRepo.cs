@@ -8,42 +8,20 @@ namespace DataAccess_Layer.Repository
     {
         #region prop
         private readonly AppDbContext _context;
+        private readonly IUserRepo _userRepo;
         #endregion
 
         #region Constructor
-        public ReceptionistRepo(AppDbContext context)
+        public ReceptionistRepo(AppDbContext context, IUserRepo userRepo)
         {
             _context = context;
-
+            _userRepo = userRepo;
         }
         #endregion
 
 
         //Method
 
-        #region Change Appoinment
-        public async Task<bool> ChangeAppointment(int appointmentId, DateTime newAppointmentTime, string newConsultingDoctor)
-        {
-            try
-            {
-                var appointment = await _context.AppointmentDetails.FindAsync(appointmentId);
-                if (appointment != null)
-                {
-                    appointment.ScheduleStartTime = newAppointmentTime;
-                    appointment.ConsultingDoctor = newConsultingDoctor;
-                    _context.Entry(appointment).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                    return true;
-                }
-                return false;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        #endregion
 
         #region Check Doctors Availabilty
 
@@ -170,7 +148,7 @@ namespace DataAccess_Layer.Repository
             try
             {
                 // Fetch the user object based on the userId (patientId)
-                var user = await GetUserById(appointmentDetails.PatientId);
+                var user = await _userRepo.GetUserById(appointmentDetails.PatientId);
                 if (user == null)
                 {
                     // User not found
@@ -192,25 +170,6 @@ namespace DataAccess_Layer.Repository
             }
 
         }
-        #endregion
-
-        #region Get User by Id
-
-        public async Task<User> GetUserById(int userId)
-        {
-            try
-            {
-                // Retrieve the user from the database based on the userId (patientId)
-                var user = await _context.User.FindAsync(userId);
-                return user;
-            }
-            catch (Exception)
-            {
-                // Handle exceptions
-                return null;
-            }
-        }
-
         #endregion
 
     }

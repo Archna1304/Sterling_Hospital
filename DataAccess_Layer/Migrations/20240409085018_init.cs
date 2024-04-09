@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccessLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class datetimechanged : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,11 +48,17 @@ namespace DataAccessLayer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ConsultingDoctor = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NurseId = table.Column<int>(type: "int", nullable: true)
+                    NurseId = table.Column<int>(type: "int", nullable: true),
+                    DoctorId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AppointmentDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppointmentDetails_User_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "User",
+                        principalColumn: "UserId");
                     table.ForeignKey(
                         name: "FK_AppointmentDetails_User_NurseId",
                         column: x => x.NurseId,
@@ -97,20 +103,10 @@ namespace DataAccessLayer.Migrations
                     { 4, "123 Main St", new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "kishan.prajapati@bacancy.com", "Kishan", "Prajapati", "password", "123-456-7890", "12345", "Patient", "Male" }
                 });
 
-            migrationBuilder.InsertData(
+            migrationBuilder.CreateIndex(
+                name: "IX_AppointmentDetails_DoctorId",
                 table: "AppointmentDetails",
-                columns: new[] { "Id", "ConsultingDoctor", "Description", "NurseId", "PatientId", "PatientProblem", "ScheduleEndTime", "ScheduleStartTime", "Status" },
-                values: new object[] { 1, "Physiotherapist", "Pain in hand & leg, SoreBody", 2, 4, "Accident induced damage", new DateTime(2024, 4, 8, 12, 12, 33, 72, DateTimeKind.Utc).AddTicks(2465), new DateTime(2024, 4, 8, 11, 12, 33, 72, DateTimeKind.Utc).AddTicks(2464), "Scheduled" });
-
-            migrationBuilder.InsertData(
-                table: "DoctorSpecialization",
-                columns: new[] { "Id", "Specialization", "UserId" },
-                values: new object[,]
-                {
-                    { 1, "BrainSurgery", 1 },
-                    { 2, "Physiotherapist", 2 },
-                    { 3, "EyeSpecialist", 3 }
-                });
+                column: "DoctorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppointmentDetails_NurseId",

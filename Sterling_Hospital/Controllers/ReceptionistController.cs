@@ -43,26 +43,6 @@ namespace Sterling_Hospital.Controllers
         }
         #endregion
 
-        #region Change Appointment
-
-        [HttpPost("ChangeAppointment")]
-        public async Task<IActionResult> ChangeAppointment([FromBody] ChangeAppointmentDTO changeAppointmentDTO)
-        {
-            var response = await _receptionistService.ChangeAppointment(changeAppointmentDTO);
-
-            if (response.Status == 200)
-            {
-                return Ok(response); // Return 200 OK status with response
-            }
-            else
-            {
-                return BadRequest(response); // Return 400 Bad Request status with response
-            }
-        }
-
-
-        #endregion
-
         #region Get Patient Appointment
 
         [HttpGet("GetPatientAppointments/{patientId}")]
@@ -83,6 +63,7 @@ namespace Sterling_Hospital.Controllers
             }
         }
         #endregion
+
     }
 
 

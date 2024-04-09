@@ -8,7 +8,6 @@ namespace DataAccess_Layer.Interface
 
         Task<bool> ScheduleAppointment(AppointmentDetails appointmentDetails);
 
-        Task<bool> ChangeAppointment(int appointmentId, DateTime newAppointmentTime, string newConsultingDoctor);
 
         Task<List<AppointmentDetails>> GetPatientAppointments(int patientId, DateTime? appointmentDate = null);
 
@@ -22,7 +21,7 @@ namespace DataAccess_Layer.Interface
 
 
         Task<bool> CheckPatient(string firstName, string email, DateTime dateOfBirth);
-        Task<User> GetUserById(int userId);
+        
 
 
     }

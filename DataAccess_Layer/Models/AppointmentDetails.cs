@@ -49,6 +49,12 @@ namespace DataAccess_Layer.Models
         [JsonIgnore]
         public virtual User Nurse { get; set; }
 
+        [ForeignKey("User")]
+        public int? DoctorId { get; set; }
+
+        [JsonIgnore]
+        public virtual User Doctor { get; set; }
+
     }
 }
     

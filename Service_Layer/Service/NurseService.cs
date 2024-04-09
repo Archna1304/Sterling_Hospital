@@ -1,27 +1,30 @@
 ﻿using DataAccess_Layer.Interface;
-using DataAccess_Layer.Models;
 using Service_Layer.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service_Layer.Service
 {
     public class NurseService : INurseService
     {
+        #region Prop
         private readonly INurseRepo _nurseRepo;
+        #endregion
 
+        #region Constructor
         public NurseService(INurseRepo nurseRepo)
         {
             _nurseRepo = nurseRepo;
         }
+        #endregion
 
-        public async Task<List<AppointmentDetails>> GetAllDuties()
+        //Methods 
+
+        #region Get Duties
+        public async Task<List<dynamic>> GetNurseDuties(int nurseId)
         {
-            return await _nurseRepo.GetAllDuties();
+            return await _nurseRepo.GetNurseDuties(nurseId);
         }
+        #endregion
+
 
     }
 }

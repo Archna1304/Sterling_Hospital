@@ -1,7 +1,4 @@
-﻿using DataAccess_Layer.Models;
-using System.ComponentModel.DataAnnotations;
-
-namespace Service_Layer.DTO
+﻿namespace Service_Layer.DTO
 {
     public class RegisterPatientDTO
     {
@@ -13,7 +10,7 @@ namespace Service_Layer.DTO
         public string Sex { get; set; }
         public string Address { get; set; }
         public string? PostalCode { get; set; }
-        public string Role { get; set; }
-        public string Password { get;}
+        public string Role { get; } = "Patient";
+        //public string Password { get;}
     }
 }

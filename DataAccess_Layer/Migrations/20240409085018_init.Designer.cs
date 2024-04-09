@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240408111233_datetime changed")]
-    partial class datetimechanged
+    [Migration("20240409085018_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,9 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("DoctorId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("NurseId")
                         .HasColumnType("int");
 
@@ -63,25 +66,13 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DoctorId");
+
                     b.HasIndex("NurseId");
 
                     b.HasIndex("PatientId");
 
                     b.ToTable("AppointmentDetails");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ConsultingDoctor = "Physiotherapist",
-                            Description = "Pain in hand & leg, SoreBody",
-                            NurseId = 2,
-                            PatientId = 4,
-                            PatientProblem = "Accident induced damage",
-                            ScheduleEndTime = new DateTime(2024, 4, 8, 12, 12, 33, 72, DateTimeKind.Utc).AddTicks(2465),
-                            ScheduleStartTime = new DateTime(2024, 4, 8, 11, 12, 33, 72, DateTimeKind.Utc).AddTicks(2464),
-                            Status = "Scheduled"
-                        });
                 });
 
             modelBuilder.Entity("DataAccess_Layer.Models.DoctorSpecialization", b =>
@@ -104,26 +95,6 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("DoctorSpecialization");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Specialization = "BrainSurgery",
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Specialization = "Physiotherapist",
-                            UserId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Specialization = "EyeSpecialist",
-                            UserId = 3
-                        });
                 });
 
             modelBuilder.Entity("DataAccess_Layer.Models.User", b =>
@@ -240,6 +211,10 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataAccess_Layer.Models.AppointmentDetails", b =>
                 {
+                    b.HasOne("DataAccess_Layer.Models.User", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId");
+
                     b.HasOne("DataAccess_Layer.Models.User", "Nurse")
                         .WithMany()
                         .HasForeignKey("NurseId");
@@ -249,6 +224,8 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Doctor");
 
                     b.Navigation("Nurse");
 

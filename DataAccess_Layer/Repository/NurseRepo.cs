@@ -26,10 +26,28 @@ namespace DataAccess_Layer.Repository
         //Methods
 
         #region Get Duties
-        public async Task<List<AppointmentDetails>> GetAllDuties()
+        public async Task<List<dynamic>> GetNurseDuties(int nurseId)
         {
-            return await _context.AppointmentDetails.Include(a => a.Patient).ToListAsync();
+            return await _context.AppointmentDetails
+                .Where(u => u.NurseId == nurseId)
+                .OrderByDescending(a => a.ScheduleStartTime)
+                .Select(u => new
+                {
+                    patientId = "Sterling_" + u.Patient.UserId.ToString(),
+                    patientName = u.Patient.FirstName + " " + u.Patient.LastName,
+                    gender = u.Patient.Sex.ToString(),
+                    Age = DateTime.UtcNow.Year - EF.Functions.DateDiffYear(u.Patient.DateOfBirth, DateTime.UtcNow),
+                    phoneNumber = u.Patient.PhoneNumber,
+                    doctor = u.DoctorId,
+                    doctorSpecialization = u.ConsultingDoctor,
+                    scheduleStartTime = u.ScheduleStartTime,
+                    scheduleEndTime = u.ScheduleEndTime,
+                    patientProblem = u.PatientProblem,
+                    description = u.Description,
+                })
+                .ToListAsync<dynamic>();
         }
+
         #endregion
     }
 }

@@ -6,5 +6,6 @@ namespace Service_Layer.Interface
     {
         Task<ResponseDTO> Register(RegisterDTO registerDTO);
         Task<ResponseDTO> Login(LoginDTO loginDTO);
+        Task<ResponseDTO> RegisterDoctor(RegisterDoctorDTO registerDoctorDTO);
     }
 }

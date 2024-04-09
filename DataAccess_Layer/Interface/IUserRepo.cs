@@ -15,5 +15,7 @@ namespace DataAccess_Layer.Interface
         Task<int> CountNurse();
         Task<int> CountReceptionist();
         Task<int> CountDoctor();
+        Task<User> GetUserById(int userId);
+        Task<bool> DeleteUser(User user);
     }
 }

@@ -20,16 +20,19 @@ namespace Service_Layer.Service
         private readonly IUserRepo _userRepo;
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
+        private readonly IDoctorRepo _doctorRepo;
+
         #endregion
 
         #region Constructor
-        public AuthService(IAuthRepo authRepo, IConfiguration configuration, IEmailService emailService, IUserRepo userRepo, IMapper mapper)
+        public AuthService(IAuthRepo authRepo, IConfiguration configuration, IEmailService emailService, IUserRepo userRepo, IMapper mapper, IDoctorRepo doctorRepo)
         {
             _authRepo = authRepo;
             _configuration = configuration;
             _emailService = emailService;
             _userRepo = userRepo;
             _mapper = mapper;
+            _doctorRepo = doctorRepo;
         }
         #endregion
 
@@ -53,11 +56,18 @@ namespace Service_Layer.Service
                     return new ResponseDTO { Status = 400, Message = "Patients cannot be registered by this Method." };
                 }
 
+                // Check if the role is patient, and disallow registration
+                if (registerDTO.Role.ToLower() == "doctor")
+                {
+                    return new ResponseDTO { Status = 400, Message = "Doctors cannot be registered by this Method." };
+                }
+
                 // Check if the role limit is exceeded
                 bool roleLimitExceeded = await CheckRoleLimit(user.Role);
                 if (roleLimitExceeded)
                 {
-                    return new ResponseDTO { Status = 400, Message = "Role limit exceeded. Registration failed." };
+                    string roleMessage = $"Role limit exceeded. There can be only {_roleLimits[user.Role]} {user.Role.ToString().ToLower()}s in the system.";
+                    return new ResponseDTO { Status = 400, Message = roleMessage };
                 }
 
                 user.Password = passwordHash; // Set the hashed password
@@ -93,6 +103,74 @@ namespace Service_Layer.Service
 
         #endregion
 
+        #region Register Doctor Method
+        public async Task<ResponseDTO> RegisterDoctor(RegisterDoctorDTO registerDoctorDTO)
+        {
+            try
+            {
+                // Map RegisterDoctorDTO to User entity
+                var user = _mapper.Map<User>(registerDoctorDTO);
+
+                // Set the hashed password
+                string passwordHash = CreatePasswordHash(registerDoctorDTO.Password);
+                user.Password = passwordHash;
+
+                // Check if the role is doctor and the doctor limit is exceeded
+                if (user.Role == Role.Doctor)
+                {
+                    bool roleLimitExceeded = await CheckRoleLimit(Role.Doctor);
+                    if (roleLimitExceeded)
+                    {
+                        string roleMessage = $"Role limit exceeded. There can be only {_roleLimits[user.Role]} {user.Role.ToString().ToLower()}s in the system.";
+                        return new ResponseDTO { Status = 400, Message = roleMessage };
+                    }
+                }
+
+                // Register user
+                bool registered = await _authRepo.Register(user);
+
+                if (registered)
+                {
+                    // Map specialization string to enum
+                    var specialization = _mapper.Map<Specialization>(registerDoctorDTO.Specialization);
+
+                    // Update DoctorSpecialization
+                    bool specializationUpdated = await _doctorRepo.UpdateDoctorSpecialization(specialization, user.UserId);
+
+                    if (specializationUpdated)
+                    {
+                        // Send email to user
+                        var emailDTO = new EmailDTO
+                        {
+                            Email = user.Email,
+                            Subject = "Registration Successful",
+                            Body = $"Dear {user.FirstName} {user.LastName},<br><br> Welcome to Sterling Hospital.<br><br> Congratulations!! Your registration was successful as a {registerDoctorDTO.Role} specialized in {registerDoctorDTO.Specialization}.<br><br>Your password is: {registerDoctorDTO.Password}<br><br>Regards,<br>Sterling Hospital"
+                        };
+
+                        _emailService.SendEmailAsync(emailDTO);
+
+                        return new ResponseDTO { Status = 200, Message = "Registration successful. Email sent to user." };
+                    }
+                    else
+                    {
+                        // Rollback registration if specialization update fails
+                        await RollbackRegistration(user.UserId);
+                        return new ResponseDTO { Status = 500, Message = "Failed to update doctor's specialization. Registration rolled back." };
+                    }
+                }
+                else
+                {
+                    return new ResponseDTO { Status = 500, Message = "Failed to register user." };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO { Status = 500, Message = "An error occurred while registering user.", Error = ex.Message };
+            }
+        }
+
+
+        #endregion
 
         #region Login Method
 
@@ -169,6 +247,31 @@ namespace Service_Layer.Service
         }
         #endregion
 
+        #region RollBack method for doctor
+        private async Task<bool> RollbackRegistration(int userId)
+        {
+            try
+            {
+                // Delete the user from the database
+                var userToDelete = await _userRepo.GetUserById(userId);
+                if (userToDelete != null)
+                {
+                    await _userRepo.DeleteUser(userToDelete);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Handle exception
+                return false;
+            }
+        }
+        #endregion
+
+       
+        //Role Limits 
+
         #region CheckRoleLimit
         private async Task<bool> CheckRoleLimit(Role role)
         {
@@ -198,5 +301,14 @@ namespace Service_Layer.Service
         }
         #endregion
 
+        #region Role Limits
+        private Dictionary<Role, int> _roleLimits = new Dictionary<Role, int>
+        {
+            { Role.Nurse, 10 },
+            { Role.Receptionist, 2 },
+            { Role.Doctor,3 }
+
+        };
+        #endregion
     }
 }

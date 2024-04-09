@@ -4,6 +4,6 @@ namespace DataAccess_Layer.Interface
 {
     public interface INurseRepo
     {
-        Task<List<AppointmentDetails>> GetAllDuties();
+        Task<List<dynamic>> GetNurseDuties(int nurseId);
     }
 }

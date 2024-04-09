@@ -63,5 +63,6 @@ namespace DataAccess_Layer.Models
         
         public Role Role { get; set; }
 
+        
     }
 }

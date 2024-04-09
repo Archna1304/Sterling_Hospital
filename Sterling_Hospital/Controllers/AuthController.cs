@@ -23,12 +23,29 @@ namespace Sterling_Hospital.Controllers
 
         //API's
 
-        #region Register
-        [HttpPost("register")]
+        #region Register User
+        [HttpPost("RegisterUser")]
         public async Task<IActionResult> Register(RegisterDTO registerDTO)
         {
             var response = await _authService.Register(registerDTO);
             return StatusCode(response.Status, response);
+        }
+        #endregion
+
+        #region Register Doctor
+        [HttpPost("RegisterDoctor")]
+        public async Task<IActionResult> RegisterDoctor([FromBody] RegisterDoctorDTO registerDoctorDTO)
+        {
+            var response = await _authService.RegisterDoctor(registerDoctorDTO);
+
+            if (response.Status == 200)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return StatusCode(response.Status, response);
+            }
         }
         #endregion
 

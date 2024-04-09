@@ -51,7 +51,7 @@ namespace Service_Layer.Service
                 }
 
                 // For patients, password format is FirstNameBirthDate
-                password = CreatePasswordHash(registerPatientDTO.FirstName + registerPatientDTO.DateOfBirth.ToString("yyyyMMdd"));
+                password = $"{registerPatientDTO.FirstName}{registerPatientDTO.DateOfBirth:yyyyMMdd}";
 
                 // Hash the password
                 string passwordHash = CreatePasswordHash(password);
@@ -78,7 +78,7 @@ namespace Service_Layer.Service
                     {
                         Email = patient.Email,
                         Subject = "Patient Profile Created Successfully",
-                        Body = $"Dear {fullName},<br><br> Your patient profile at Sterling Hospital has been created successfully.<br><br> Your patient ID is: {patientId} and your password is: {registerPatientDTO.Password}<br><br>Regards,<br>Sterling Hospital"
+                        Body = $"Dear {fullName},<br><br> Your patient profile at Sterling Hospital has been created successfully.<br><br> Your patient ID is: {patientId} and your password is: {password}<br><br>Regards,<br>Sterling Hospital"
                     };
 
                     _emailService.SendEmailAsync(emailDTO);
@@ -120,7 +120,7 @@ namespace Service_Layer.Service
 
 
                 // Fetch the user object based on the userId (patientId)
-                var user = await _receptionistRepo.GetUserById(appointmentDTO.PatientId);
+                var user = await _userRepo.GetUserById(appointmentDTO.PatientId);
                 if (user == null)
                 {
                     return new ResponseDTO { Status = 400, Message = "Patient details not found." };
@@ -174,70 +174,6 @@ namespace Service_Layer.Service
             }
         }
 
-
-        #endregion
-
-        #region Change Appointment
-
-        public async Task<ResponseDTO> ChangeAppointment(ChangeAppointmentDTO changeAppointmentDTO)
-        {
-            try
-            {
-                // Check doctor availability for the new appointment time
-                bool doctorAvailable = await _receptionistRepo.CheckDoctorAvailability((Specialization)Enum.Parse(typeof(Specialization), changeAppointmentDTO.NewConsultingDoctor), changeAppointmentDTO.NewAppointmentStartTime);
-
-                if (!doctorAvailable)
-                {
-                    // Doctor is not available at the new time
-                    return new ResponseDTO { Status = 400, Message = "Doctor is not available at the specified time." };
-                }
-
-                // Call the repository method to get the appointment details
-                var appointments = await _receptionistRepo.GetPatientAppointments(changeAppointmentDTO.AppointmentId);
-
-                // Check if the appointment exists
-                var appointment = appointments.FirstOrDefault(a => a.Id == changeAppointmentDTO.AppointmentId);
-                if (appointment == null)
-                {
-                    return new ResponseDTO { Status = 400, Message = "Failed to update appointment. Appointment not found." };
-                }
-
-                // Update appointment details
-                appointment.ScheduleStartTime = changeAppointmentDTO.NewAppointmentStartTime;
-                appointment.ConsultingDoctor = changeAppointmentDTO.NewConsultingDoctor;
-
-                // Call the repository method to change the appointment
-                bool appointmentChanged = await _receptionistRepo.ChangeAppointment(changeAppointmentDTO.AppointmentId, changeAppointmentDTO.NewAppointmentStartTime, changeAppointmentDTO.NewConsultingDoctor);
-
-                if (appointmentChanged)
-                {
-                    // Send email with updated appointment details
-                    string fullName = $"{appointment.Patient.FirstName} {appointment.Patient.LastName}";
-                    string emailBody = $"Dear {fullName},<br><br>Your appointment has been updated successfully.<br><br>New Appointment Date: {appointment.ScheduleStartTime}<br>New Consulting Doctor: {appointment.ConsultingDoctor}<br><br>Regards,<br>Team";
-
-                    // Create EmailDTO object
-                    var emailDTO = new EmailDTO
-                    {
-                        Email = appointment.Patient.Email,
-                        Subject = "Appointment Updated Successfully",
-                        Body = emailBody
-                    };
-
-                    // Send email asynchronously
-                    _emailService.SendEmailAsync(emailDTO);
-
-                    return new ResponseDTO { Status = 200, Message = "Appointment updated successfully. Email sent to patient." };
-                }
-                else
-                {
-                    return new ResponseDTO { Status = 400, Message = "Failed to update appointment." };
-                }
-            }
-            catch (Exception ex)
-            {
-                return new ResponseDTO { Status = 500, Message = "An error occurred while updating appointment.", Error = ex.Message };
-            }
-        }
 
         #endregion
 

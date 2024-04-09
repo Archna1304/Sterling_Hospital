@@ -5,6 +5,7 @@ C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\St
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\Sterling_Hospital.runtimeconfig.json
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\Sterling_Hospital.dll
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\Sterling_Hospital.pdb
+C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\AutoMapper.dll
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\Azure.Core.dll
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\Azure.Identity.dll
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\BouncyCastle.Cryptography.dll
@@ -98,4 +99,3 @@ C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\re
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\Sterling_Hospital.pdb
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\Sterling_Hospital.genruntimeconfig.cache
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\ref\Sterling_Hospital.dll
-C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\AutoMapper.dll

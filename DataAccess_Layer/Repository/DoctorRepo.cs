@@ -1,11 +1,7 @@
 ﻿using DataAccess_Layer.Interface;
 using DataAccess_Layer.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess_Layer.Repository
 {
@@ -16,7 +12,7 @@ namespace DataAccess_Layer.Repository
         #endregion
 
         #region construtor
-        public DoctorRepo (AppDbContext context)
+        public DoctorRepo(AppDbContext context)
         {
             _context = context;
         }
@@ -24,14 +20,28 @@ namespace DataAccess_Layer.Repository
 
         //Methods
 
-        #region Get Appointments
-        public async Task<List<AppointmentDetails>> GetAllAppointments()
+        #region Get Doctor Appointments
+        public async Task<List<dynamic>> GetDoctorAppointments(string specialization, int doctorId)
         {
-            return await _context.AppointmentDetails
-         .Include(a => a.Patient)
-         .Where(a => a.ConsultingDoctor == Specialization && a.DoctorId == doctorId)
-         .OrderByDescending(a => a.ScheduleStartTime)
-         .ToListAsync();
+            var appointments = await _context.AppointmentDetails
+                .Where(a => a.ConsultingDoctor == specialization && a.DoctorId == doctorId)
+                .OrderByDescending(a => a.ScheduleStartTime)
+                .Select(a => new
+                {
+                    patientId = "Sterling_" + a.Patient.UserId.ToString(),
+                    patientName = a.Patient.FirstName + " " + a.Patient.LastName,
+                    gender = a.Patient.Sex.ToString(),
+                    email = a.Patient.Email,
+                    phoneNumber = a.Patient.PhoneNumber,
+                    scheduleStartTime = a.ScheduleStartTime,
+                    scheduleEndTime = a.ScheduleEndTime,
+                    patientProblem = a.PatientProblem,
+                    description = a.Description,
+                    status = a.Status.ToString()
+                })
+                .ToListAsync();
+
+            return appointments.Cast<dynamic>().ToList();
         }
         #endregion
 
@@ -46,18 +56,20 @@ namespace DataAccess_Layer.Repository
         #endregion
 
         #region Reschedule Appointment
-        public async Task<bool> RescheduleAppointment(int appointmentId, DateTime newStartTime)
+        public async Task<bool> RescheduleAppointment(int appointmentId, DateTime newStartTime, string newConsultingDoctor)
         {
             var appointment = await _context.AppointmentDetails.FindAsync(appointmentId);
             if (appointment != null)
             {
                 appointment.ScheduleStartTime = newStartTime;
+                appointment.ConsultingDoctor = newConsultingDoctor; // Update consulting doctor
                 await _context.SaveChangesAsync();
                 return true;
             }
             return false;
         }
         #endregion
+
 
         #region Cancel Appointment
         public async Task<bool> CancelAppointment(int appointmentId)
@@ -73,7 +85,7 @@ namespace DataAccess_Layer.Repository
         }
         #endregion
 
-        #region Assigne Nurse Duty
+        #region Assign Duty to Nurse
         public async Task<bool> AssignDutyToNurse(int appointmentId, int nurseId)
         {
             var appointment = await _context.AppointmentDetails.FindAsync(appointmentId);
@@ -86,5 +98,47 @@ namespace DataAccess_Layer.Repository
             return false;
         }
         #endregion
+
+        //Additional Method
+
+        #region Doctor Specialization
+        public async Task<bool> UpdateDoctorSpecialization(Specialization specialization, int userId)
+        {
+            try
+            {
+                // Check if the doctor already has a specialization
+                var existingSpecialization = await _context.DoctorSpecialization.FirstOrDefaultAsync(ds => ds.UserId == userId);
+
+                // If the doctor already has a specialization, update it
+                if (existingSpecialization != null)
+                {
+                    existingSpecialization.Specialization = specialization;
+                    _context.DoctorSpecialization.Update(existingSpecialization);
+                }
+                else
+                {
+                    // Otherwise, create a new DoctorSpecialization entry
+                    var newSpecialization = new DoctorSpecialization
+                    {
+                        UserId = userId,
+                        Specialization = specialization
+                    };
+                    _context.DoctorSpecialization.Add(newSpecialization);
+                }
+
+                // Save changes to the database
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                return false;
+            }
+
+        }
+        #endregion
+
     }
 }

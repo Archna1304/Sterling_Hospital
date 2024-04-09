@@ -10,19 +10,26 @@ namespace Sterling_Hospital.Controllers
     [ApiController]
     public class NurseController : ControllerBase
     {
+        #region prop
         private readonly INurseService _nurseService;
+        #endregion
 
+        #region Constructor
         public NurseController(INurseService nurseService)
         {
             _nurseService = nurseService;
         }
+        #endregion
 
+        //Methods
+
+        #region Nurse Duties
         [HttpGet("NurseDuties")]
-        public async Task<ActionResult<List<AppointmentDetails>>> GetNurseDuties()
+        public async Task<ActionResult<List<AppointmentDetails>>> GetNurseDuties(int nurseId)
         {
             try
             {
-                var duties = await _nurseService.GetAllDuties();
+                var duties = await _nurseService.GetNurseDuties(nurseId);
                 return Ok(duties);
             }
             catch (Exception ex)
@@ -30,5 +37,6 @@ namespace Sterling_Hospital.Controllers
                 return StatusCode(500, new ResponseDTO { Status = 500, Message = "An error occurred while fetching nurse duties.", Error = ex.Message });
             }
         }
+        #endregion
     }
 }

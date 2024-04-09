@@ -41,7 +41,6 @@ namespace DataAccess_Layer.Repository
         }
         #endregion
 
-
         #region Count Doctor, Nurse, Receptionist
         public async Task<int> CountDoctor()
         {
@@ -61,5 +60,40 @@ namespace DataAccess_Layer.Repository
             return count;
         }
         #endregion
+
+        #region Get User by Id
+        public async Task<User> GetUserById(int userId)
+        {
+            try
+            {
+                // Retrieve the user from the database based on the userId (patientId)
+                var user = await _context.User.FindAsync(userId);
+                return user;
+            }
+            catch (Exception)
+            {
+                // Handle exceptions
+                return null;
+            }
+        }
+        #endregion
+
+        #region Delete User
+        public async Task<bool> DeleteUser(User user)
+        {
+            try
+            {
+                _context.User.Remove(user);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Handle exception
+                return false;
+            }
+        }
+        #endregion
+
     }
 }

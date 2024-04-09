@@ -1,8 +1,6 @@
-﻿using DataAccess_Layer.Models;
-
-namespace Service_Layer.DTO
+﻿namespace Service_Layer.DTO
 {
-   
+
     public class AppointmentDTO
     {
         public int PatientId { get; set; }
@@ -12,7 +10,7 @@ namespace Service_Layer.DTO
         public string Description { get; set; }
         public string Status { get; set; }
         public string ConsultingDoctor { get; set; }
-        public int? NurseId { get; } = null;
+        public int? DoctorId { get; set; }
 
 
     }
