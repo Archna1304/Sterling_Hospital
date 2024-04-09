@@ -22,8 +22,8 @@ namespace Service_Layer.Service
         //Methods
 
         #region Get Current Appointment
-        // Get current appointments for a specific patient ordered by latest first
-        public async Task<List<AppointmentDetails>> GetCurrentAppointments(int patientId)
+        // Get the most recent appointment for a specific patient
+        public async Task<AppointmentDetails> GetCurrentAppointment(int patientId)
         {
             return await _patientRepo.GetCurrentAppointments(patientId);
         }

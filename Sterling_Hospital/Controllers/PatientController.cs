@@ -24,10 +24,14 @@ namespace Sterling_Hospital.Controllers
 
         // GET: api/PatientAppointments/current/{patientId}
         [HttpGet("CurrentAppointment/{patientId}")]
-        public async Task<IActionResult> GetCurrentAppointments(int patientId)
+        public async Task<IActionResult> GetCurrentAppointment(int patientId)
         {
-            var appointments = await _patientService.GetCurrentAppointments(patientId);
-            return Ok(appointments);
+            var appointment = await _patientService.GetCurrentAppointment(patientId);
+            if (appointment == null)
+            {
+                return NotFound("No current appointments found for the specified patient.");
+            }
+            return Ok(appointment);
         }
         #endregion
 

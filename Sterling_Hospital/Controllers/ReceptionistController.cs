@@ -1,8 +1,8 @@
 ﻿using DataAccess_Layer.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service_Layer.DTO;
 using Service_Layer.Interface;
+using Service_Layer.Services;
 
 namespace Sterling_Hospital.Controllers
 {
@@ -12,12 +12,14 @@ namespace Sterling_Hospital.Controllers
 
         #region prop
         private readonly IReceptionistService _receptionistService;
+        private readonly IValidationService _validationService;
         #endregion
 
         #region Constructor
-        public ReceptionistController(IReceptionistService receptionistService)
+        public ReceptionistController(IReceptionistService receptionistService, IValidationService validationService)
         {
             _receptionistService = receptionistService;
+            _validationService = validationService;
         }
         #endregion
 
@@ -27,6 +29,12 @@ namespace Sterling_Hospital.Controllers
         [HttpPost("CreatePatientProfile")]
         public async Task<IActionResult> CreatePatientProfile(RegisterPatientDTO registerPatientDTO)
         {
+            var validationResponse = await _validationService.ValidatePatient(registerPatientDTO);
+            if (validationResponse.Status != 200)
+            {
+                return BadRequest(validationResponse);
+            }
+
             var response = await _receptionistService.CreatePatientProfile(registerPatientDTO);
             return StatusCode(response.Status, response);
         }
@@ -36,6 +44,12 @@ namespace Sterling_Hospital.Controllers
         [HttpPost("ScheduleAppointment")]
         public async Task<IActionResult> ScheduleAppointment([FromBody] AppointmentDTO appointmentDTO)
         {
+            var validationResponse = await _validationService.ValidateAppointmentDTO(appointmentDTO);
+            if (validationResponse.Status != 200)
+            {
+                return BadRequest(validationResponse);
+            }
+
             var response = await _receptionistService.ScheduleAppointment(appointmentDTO);
             return StatusCode(response.Status, response);
         }

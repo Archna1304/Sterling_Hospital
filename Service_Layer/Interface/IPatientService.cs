@@ -4,7 +4,7 @@ namespace Service_Layer.Interface
 {
     public interface IPatientService
     {
-        Task<List<AppointmentDetails>> GetCurrentAppointments(int patientId);
+        Task<AppointmentDetails> GetCurrentAppointment(int patientId);
         Task<List<AppointmentDetails>> GetPreviousAppointments(int patientId);
     }
 }

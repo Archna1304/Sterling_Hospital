@@ -102,21 +102,32 @@ namespace Service_Layer.Service
                 appointment.Status = DataAccess_Layer.Models.Status.Cancelled;
                 await _doctorRepo.UpdateAppointment(appointment);
 
-                // Send email notification of appointment cancellation
-                var emailDTO = new EmailDTO
+                if (appointment != null && appointment.Patient != null)
                 {
-                    Email = appointment.Patient.Email,
-                    Subject = "Appointment Cancellation",
-                    Body = $"Dear {appointment.Patient.FirstName} {appointment.Patient.LastName},<br><br> Your appointment scheduled for {appointment.ScheduleStartTime} has been cancelled."
-                };
-                
-                _emailService.SendEmailAsync(emailDTO);
+                    var emailDTO = new EmailDTO
+                    {
+                        Email = appointment.Patient.Email,
+                        Subject = "Appointment Cancellation",
+                        Body = $"Dear {appointment.Patient.FirstName} {appointment.Patient.LastName},<br><br> Your appointment scheduled for {appointment.ScheduleStartTime} has been cancelled."
+                    };
 
-                return new ResponseDTO
+                    // Send the email
+                    _emailService.SendEmailAsync(emailDTO);
+
+                    return new ResponseDTO
+                    {
+                        Status = 200,
+                        Message = "Appointment cancelled successfully."
+                    };
+                }
+                else
                 {
-                    Status = 200,
-                    Message = "Appointment cancelled successfully."
-                };
+                    return new ResponseDTO
+                    {
+                        Status = 400,
+                        Message = "Appointment or patient is null. Cannot send email notification."
+                    };
+                }
             }
             catch (Exception ex)
             {
@@ -129,6 +140,7 @@ namespace Service_Layer.Service
             }
         }
         #endregion
+
 
         #region AsisgnDuty to Nurse
         public async Task<bool> AssignDutyToNurse(int appointmentId, int nurseId)
