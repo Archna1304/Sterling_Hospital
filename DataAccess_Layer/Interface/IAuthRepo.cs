@@ -10,7 +10,6 @@ namespace DataAccess_Layer.Interface
     public interface IAuthRepo
     {
         Task<bool> Register(User user);
-        Task<User> LoginWithEmail (String email, string password);
-        Task<User> LoginWithPhoneNumber (String phoneNumber, String password);
+        Task<User> LoginWithEmailOrPhoneNumber(string emailOrPhoneNumber, string password);
     }
 }

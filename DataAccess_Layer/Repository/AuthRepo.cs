@@ -37,19 +37,39 @@ namespace DataAccess_Layer.Repository
 
         #region Login Method
 
-        //Login with email
-        public async Task<User> LoginWithEmail (string email, string password)
+        // Login with email or phone number
+        public async Task<User> LoginWithEmailOrPhoneNumber(string emailOrPhoneNumber, string password)
         {
-            var user = await _context.User.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+            User user = null;
+
+            if (IsEmail(emailOrPhoneNumber))
+            {
+                // Login with email
+                user = await _context.User.FirstOrDefaultAsync(u => u.Email == emailOrPhoneNumber && u.Password == password);
+            }
+            else
+            {
+                // Login with phone number
+                user = await _context.User.FirstOrDefaultAsync(u => u.PhoneNumber == emailOrPhoneNumber && u.Password == password);
+            }
+
             return user;
         }
 
-        //Login with Phone Number
-        public async Task<User> LoginWithPhoneNumber (string phoneNumber, string password)
+        // Helper method to check if input is in email format
+        private bool IsEmail(string input)
         {
-            var user = await _context.User.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber && u.Password == password);
-            return user;
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(input);
+                return addr.Address == input;
+            }
+            catch
+            {
+                return false;
+            }
         }
+
         #endregion
 
     }

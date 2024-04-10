@@ -59,11 +59,11 @@ namespace Sterling_Hospital.Controllers
         #region Get Patient Appointment
 
         [HttpGet("GetPatientAppointments/{patientId}")]
-        public async Task<ActionResult<List<AppointmentDetails>>> GetPatientAppointments(int patientId, DateTime? appointmentDate = null)
+        public async Task<ActionResult<List<AppointmentDetails>>> GetPatientAppointments(int patientId)
         {
             try
             {
-                var appointments = await _receptionistService.GetPatientAppointments(patientId, appointmentDate);
+                var appointments = await _receptionistService.GetPatientAppointments(patientId);
                 if (appointments == null)
                 {
                     return NotFound("No appointments found for the specified patient.");

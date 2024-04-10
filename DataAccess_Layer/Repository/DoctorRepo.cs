@@ -1,6 +1,5 @@
 ﻿using DataAccess_Layer.Interface;
 using DataAccess_Layer.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess_Layer.Repository
@@ -46,27 +45,32 @@ namespace DataAccess_Layer.Repository
         #endregion
 
         #region Check Availability
-        public async Task<bool> CheckAvailability(int doctorId, string consultingDoctor, DateTime appointmentTime)
+        public async Task<bool> CheckAvailability(int doctorId, DateTime appointmentTime)
         {
             // Your implementation to check availability in the database
             return !(await _context.AppointmentDetails
-                .AnyAsync(a => a.DoctorId == doctorId && a.ConsultingDoctor == consultingDoctor && a.ScheduleStartTime <= appointmentTime && a.ScheduleEndTime >= appointmentTime));
+                .AnyAsync(a => a.DoctorId == doctorId && a.ScheduleStartTime <= appointmentTime && a.ScheduleEndTime >= appointmentTime));
         }
         #endregion
 
         #region Reschedule Appointment
-        public async Task<bool> RescheduleAppointment(int appointmentId, DateTime newStartTime, DateTime newEndTime, string newConsultingDoctor)
+        public async Task<string> RescheduleAppointment(int appointmentId, DateTime newStartTime, DateTime newEndTime)
         {
             var appointment = await _context.AppointmentDetails.FindAsync(appointmentId);
+            int patientId = appointment.PatientId;
             if (appointment != null)
             {
+                appointment.Status = Status.Rescheduled;
                 appointment.ScheduleStartTime = newStartTime;
                 appointment.ScheduleEndTime = newEndTime;
-                appointment.ConsultingDoctor = newConsultingDoctor; // Update consulting doctor
+                _context.Update(appointment);
                 await _context.SaveChangesAsync();
-                return true;
+
+                var patient = await _context.User.FirstOrDefaultAsync(u => u.UserId == patientId);
+                var email = patient.Email;
+                return email;
             }
-            return false;
+            return null;
         }
         #endregion
 
@@ -77,36 +81,24 @@ namespace DataAccess_Layer.Repository
         }
         #endregion
 
-        #region Update Appointment
-        public async Task<bool> UpdateAppointment(AppointmentDetails appointment)
-        {
-            try
-            {
-                _context.AppointmentDetails.Update(appointment);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        #endregion
+       
+
         #region Cancel Appointment
-        public async Task<bool> CancelAppointment(int appointmentId)
+        public async Task<string> CancelAppointment(int appointmentId)
         {
             var appointment = await _context.AppointmentDetails.FindAsync(appointmentId);
+            int patientId = appointment.PatientId;
             if (appointment != null)
             {
-                // Update appointment status to "Cancelled"
-                appointment.Status = DataAccess_Layer.Models.Status.Cancelled;
-
-                // Save changes to the database
+                appointment.Status = Status.Cancelled;
+                _context.Update(appointment);
                 await _context.SaveChangesAsync();
 
-                return true;
+                var patient = await _context.User.FirstOrDefaultAsync(u => u.UserId == patientId);
+                var email = patient.Email;
+                return email;
             }
-            return false;
+            return null;
         }
         #endregion
 
@@ -164,7 +156,21 @@ namespace DataAccess_Layer.Repository
             }
 
         }
+
+
+        public async Task<int> CountDoctorsBySpecialization(Specialization specialization)
+        {
+            return await _context.DoctorSpecialization
+                .Where(ds => ds.Specialization == specialization)
+                .CountAsync();
+        }
+
+
+
         #endregion
+
+
+
 
     }
 }

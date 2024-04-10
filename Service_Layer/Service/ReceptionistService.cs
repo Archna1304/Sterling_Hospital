@@ -111,13 +111,15 @@ namespace Service_Layer.Service
                 }
 
                 // Check doctor availability
-                bool doctorAvailable = await _receptionistRepo.CheckDoctorAvailability((Specialization)Enum.Parse(typeof(Specialization), appointmentDTO.ConsultingDoctor), appointmentDTO.ScheduleStartTime);
+                bool doctorAvailable = await _receptionistRepo.CheckDoctorAvailability(
+                    (Specialization)Enum.Parse(typeof(Specialization), appointmentDTO.ConsultingDoctor),
+                    appointmentDTO.ScheduleStartTime,
+                    appointmentDTO.ScheduleEndTime);
+
                 if (!doctorAvailable)
                 {
                     return new ResponseDTO { Status = 400, Message = "Doctor is not available at the specified time." };
                 }
-
-
 
                 // Fetch the user object based on the userId (patientId)
                 var user = await _userRepo.GetUserById(appointmentDTO.PatientId);
@@ -160,11 +162,11 @@ namespace Service_Layer.Service
 
         #region Get Patient Appointment Details
 
-        public async Task<List<AppointmentDetails>> GetPatientAppointments(int patientId, DateTime? appointmentDate = null)
+        public async Task<List<dynamic>> GetPatientAppointments(int patientId)
         {
             try
             {
-                var appointments = await _receptionistRepo.GetPatientAppointments(patientId, appointmentDate);
+                var appointments = await _receptionistRepo.GetPatientAppointments(patientId);
                 return appointments;
             }
             catch (Exception)

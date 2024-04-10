@@ -41,30 +41,24 @@ namespace Service_Layer.Service
                 }
 
                 // Check availability for the new appointment time
-                bool isAvailable = await _doctorRepo.CheckAvailability(appointment.DoctorId ?? default(int), changeAppointmentDTO.NewConsultingDoctor, changeAppointmentDTO.NewAppointmentStartTime);
+                bool isAvailable = await _doctorRepo.CheckAvailability(appointment.DoctorId ?? default(int), changeAppointmentDTO.NewAppointmentStartTime);
 
                 if (!isAvailable)
                 {
                     return new ResponseDTO { Status = 400, Message = "Doctor is not available at the requested time." };
                 }
 
-                // Update appointment details
-                appointment.ScheduleStartTime = changeAppointmentDTO.NewAppointmentStartTime;
-                appointment.ScheduleEndTime = changeAppointmentDTO.NewAppointmentEndTime;
-                appointment.ConsultingDoctor = changeAppointmentDTO.NewConsultingDoctor;
-                appointment.Status = DataAccess_Layer.Models.Status.Rescheduled;
+                // Reschedule the appointment
+                string patientEmail = await _doctorRepo.RescheduleAppointment(changeAppointmentDTO.AppointmentId, changeAppointmentDTO.NewAppointmentStartTime, changeAppointmentDTO.NewAppointmentEndTime);
 
-                // Update appointment in the database
-                bool result = await _doctorRepo.UpdateAppointment(appointment);
-
-                if (result)
+                if (patientEmail != null)
                 {
                     // Send email notification
                     var emailDTO = new EmailDTO
                     {
-                        Email = appointment.Patient.Email,
+                        Email = patientEmail,
                         Subject = "Appointment Rescheduled",
-                        Body = $"Dear {appointment.Patient.FirstName} {appointment.Patient.LastName},<br><br>Your appointment has been successfully rescheduled with {changeAppointmentDTO.NewConsultingDoctor} on {changeAppointmentDTO.NewAppointmentStartTime} to {changeAppointmentDTO.NewAppointmentEndTime}.<br><br>Regards,<br>Sterling Hospital"
+                        Body = $"Dear {appointment.Patient.FirstName} {appointment.Patient.LastName},<br><br>Your appointment has been successfully rescheduled on {changeAppointmentDTO.NewAppointmentStartTime} to {changeAppointmentDTO.NewAppointmentEndTime}.<br><br>Regards,<br>Sterling Hospital"
                     };
                     _emailService.SendEmailAsync(emailDTO);
 
@@ -80,6 +74,7 @@ namespace Service_Layer.Service
                 return new ResponseDTO { Status = 500, Message = "An error occurred while rescheduling appointment.", Error = ex.Message };
             }
         }
+
         #endregion
 
         #region Cancel Appointments
@@ -98,25 +93,35 @@ namespace Service_Layer.Service
                     };
                 }
 
-                // Update appointment status to Cancelled
-                appointment.Status = DataAccess_Layer.Models.Status.Cancelled;
-                await _doctorRepo.UpdateAppointment(appointment);
+                // Cancel the appointment
+                string patientEmail = await _doctorRepo.CancelAppointment(appointmentId);
 
-                var emailDTO = new EmailDTO
+                if (patientEmail != null)
                 {
-                    Email = appointment.Patient.Email,
-                    Subject = "Appointment Cancellation",
-                    Body = $"Dear {appointment.Patient.FirstName} {appointment.Patient.LastName},<br><br> Your appointment scheduled for {appointment.ScheduleStartTime} has been cancelled."
-                };
+                    var emailDTO = new EmailDTO
+                    {
+                        Email = patientEmail,
+                        Subject = "Appointment Cancellation",
+                        Body = $"Dear {appointment.Patient.FirstName} {appointment.Patient.LastName},<br><br>Your appointment scheduled for {appointment.ScheduleStartTime} has been cancelled."
+                    };
 
-                // Send the email
-                _emailService.SendEmailAsync(emailDTO);
+                    // Send the email
+                    _emailService.SendEmailAsync(emailDTO);
 
-                return new ResponseDTO
+                    return new ResponseDTO
+                    {
+                        Status = 200,
+                        Message = "Appointment cancelled successfully."
+                    };
+                }
+                else
                 {
-                    Status = 200,
-                    Message = "Appointment cancelled successfully."
-                };
+                    return new ResponseDTO
+                    {
+                        Status = 400,
+                        Message = "Failed to cancel appointment. Appointment not found."
+                    };
+                }
             }
             catch (Exception ex)
             {
@@ -129,6 +134,7 @@ namespace Service_Layer.Service
             }
         }
         #endregion
+
 
 
         #region AsisgnDuty to Nurse

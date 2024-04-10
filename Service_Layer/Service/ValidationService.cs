@@ -17,7 +17,7 @@ namespace RepoPatternSports.Service.Service
 
             var errors = new List<string>();
 
-            if (string.IsNullOrWhiteSpace(loginDTO.Email) && string.IsNullOrWhiteSpace(loginDTO.PhoneNumber))
+            if (string.IsNullOrWhiteSpace(loginDTO.PhoneNumberOrEmail) && string.IsNullOrWhiteSpace(loginDTO.PhoneNumberOrEmail))
             {
                 errors.Add("Email or phone number is required.");
             }
@@ -111,10 +111,10 @@ namespace RepoPatternSports.Service.Service
             {
                 response.Errors.Add("Password is required.");
             }
-            else if (!IsValidPassword(registerDTO.Password))
-            {
-                response.Errors.Add("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.");
-            }
+            //else if (!IsValidPassword(registerDTO.Password))
+            //{
+            //    response.Errors.Add("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.");
+            //}
 
             if (string.IsNullOrWhiteSpace(registerDTO.Role))
             {
@@ -203,10 +203,10 @@ namespace RepoPatternSports.Service.Service
             {
                 errors.Add("Password is required.");
             }
-            else if (!IsValidPassword(registerDoctorDTO.Password))
-            {
-                errors.Add("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.");
-            }
+            //else if (!IsValidPassword(registerDoctorDTO.Password))
+            //{
+            //    errors.Add("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.");
+            //}
 
             if (string.IsNullOrWhiteSpace(registerDoctorDTO.Role))
             {
@@ -265,18 +265,7 @@ namespace RepoPatternSports.Service.Service
                 errors.Add("NewAppointmentEndTime must be after NewAppointmentStartTime.");
             }
 
-            if (string.IsNullOrWhiteSpace(changeAppointmentDTO.NewConsultingDoctor))
-            {
-                errors.Add("NewConsultingDoctor is required.");
-            }
-            else
-            {
-                string[] validDoctors = { "BrainSurgery", "Physiotherapist", "EyeSpecialist" };
-                if (!validDoctors.Contains(changeAppointmentDTO.NewConsultingDoctor))
-                {
-                    errors.Add("Invalid consulting doctor. Must be 'BrainSurgery', 'Physiotherapist', or 'EyeSpecialist'.");
-                }
-            }
+           
 
             response.Status = errors.Any() ? 400 : 200;
             response.Message = errors.Any() ? "Validation failed." : "Validation successful.";
@@ -513,13 +502,13 @@ namespace RepoPatternSports.Service.Service
 
         public static bool IsValidPostalCode(string postalCode)
         {
-            return Regex.Match(postalCode, @"^\d{5}$").Success;
+            return Regex.Match(postalCode, @"^\d{6}$").Success;
         }
 
-        public static bool IsValidPassword(string password)
-        {
-            return Regex.Match(password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$").Success;
-        }
+        //public static bool IsValidPassword(string password)
+        //{
+        //    return Regex.Match(password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$").Success;
+        //}
 
         #endregion
     }

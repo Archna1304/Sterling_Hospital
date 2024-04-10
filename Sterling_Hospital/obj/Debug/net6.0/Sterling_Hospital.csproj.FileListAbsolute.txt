@@ -1,3 +1,9 @@
+C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\Sterling_Hospital.csproj.AssemblyReference.cache
+C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\Sterling_Hospital.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\Sterling_Hospital.AssemblyInfoInputs.cache
+C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\Sterling_Hospital.AssemblyInfo.cs
+C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\Sterling_Hospital.csproj.CoreCompileInputs.cache
+C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\Sterling_Hospital.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\appsettings.json
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\Sterling_Hospital.exe
@@ -78,13 +84,6 @@ C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\Da
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\Service_Layer.dll
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\DataAccess_Layer.pdb
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\bin\Debug\net6.0\Service_Layer.pdb
-C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\Sterling_Hospital.csproj.AssemblyReference.cache
-C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\Sterling_Hospital.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\Sterling_Hospital.AssemblyInfoInputs.cache
-C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\Sterling_Hospital.AssemblyInfo.cs
-C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\Sterling_Hospital.csproj.CoreCompileInputs.cache
-C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\Sterling_Hospital.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\Sterling_Hospital.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\staticwebassets.build.json
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\staticwebassets.development.json
 C:\Users\a1\source\repos\Sterling_Hospital\Sterling_Hospital\obj\Debug\net6.0\staticwebassets\msbuild.Sterling_Hospital.Microsoft.AspNetCore.StaticWebAssets.props

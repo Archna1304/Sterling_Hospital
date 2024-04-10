@@ -115,24 +115,30 @@ namespace Service_Layer.Service
                 string passwordHash = CreatePasswordHash(registerDoctorDTO.Password);
                 user.Password = passwordHash;
 
+                // Map specialization string to enum
+                var specialization = _mapper.Map<Specialization>(registerDoctorDTO.Specialization);
+
                 // Check if the role is doctor and the doctor limit is exceeded
                 if (user.Role == Role.Doctor)
                 {
-                    bool roleLimitExceeded = await CheckRoleLimit(Role.Doctor);
+                    bool roleLimitExceeded = await CheckRoleLimit(Role.Doctor, specialization);
                     if (roleLimitExceeded)
                     {
-                        string roleMessage = $"Role limit exceeded. There can be only {_roleLimits[user.Role]} {user.Role.ToString().ToLower()}s in the system.";
+                        string roleMessage = $"Role limit exceeded. There can be only {_roleLimits[Role.Doctor]} doctors in the system.";
                         return new ResponseDTO { Status = 400, Message = roleMessage };
                     }
                 }
 
+
                 // Register user
                 bool registered = await _authRepo.Register(user);
+
+               
 
                 if (registered)
                 {
                     // Map specialization string to enum
-                    var specialization = _mapper.Map<Specialization>(registerDoctorDTO.Specialization);
+                    var doctorSpecialization = _mapper.Map<Specialization>(registerDoctorDTO.Specialization);
 
                     // Update DoctorSpecialization
                     bool specializationUpdated = await _doctorRepo.UpdateDoctorSpecialization(specialization, user.UserId);
@@ -182,17 +188,17 @@ namespace Service_Layer.Service
                 string passwordHash = CreatePasswordHash(loginDTO.Password);
 
                 User loggedInUser = null;
-
                 // Check if loginDTO contains email or phone number
-                if (!string.IsNullOrEmpty(loginDTO.Email))
+                if (!string.IsNullOrEmpty(loginDTO.PhoneNumberOrEmail))
                 {
-                    // Login with email
-                    loggedInUser = await _authRepo.LoginWithEmail(loginDTO.Email, passwordHash);
-                }
-                else if (!string.IsNullOrEmpty(loginDTO.PhoneNumber))
-                {
-                    // Login with phone number
-                    loggedInUser = await _authRepo.LoginWithPhoneNumber(loginDTO.PhoneNumber, passwordHash);
+                    // Login with email or phone number
+                    loggedInUser = await _authRepo.LoginWithEmailOrPhoneNumber(loginDTO.PhoneNumberOrEmail, passwordHash);
+
+                    if (loggedInUser == null)
+                    {
+                        // Neither email nor phone number provided
+                        return new ResponseDTO { Status = 401, Message = "Invalid credentials" };
+                    }
                 }
                 else
                 {
@@ -203,9 +209,9 @@ namespace Service_Layer.Service
                 if (loggedInUser != null)
                 {
                     var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Role, loggedInUser.Role.ToString()),
-            };
+                    {
+                        new Claim(ClaimTypes.Role, loggedInUser.Role.ToString()),
+                    };
 
                     // Token Generation
                     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -273,15 +279,23 @@ namespace Service_Layer.Service
         //Role Limits 
 
         #region CheckRoleLimit
-        private async Task<bool> CheckRoleLimit(Role role)
+        private async Task<bool> CheckRoleLimit(Role role, Specialization? specialization = null)
         {
             try
             {
                 switch (role)
                 {
                     case Role.Doctor:
-                        int doctorCount = await _userRepo.CountDoctor();
-                        return doctorCount >= 3; // Limit to 3 doctors
+                        if (specialization != null)
+                        {
+                            int doctorCountBySpecialization = await _doctorRepo.CountDoctorsBySpecialization(specialization.Value);
+                            return doctorCountBySpecialization >= 1; // Limit to 1 doctor per specialization
+                        }
+                        else
+                        {
+                            int doctorCount = await _userRepo.CountDoctor();
+                            return doctorCount >= 3; // Limit to 3 doctors for unspecified specialization
+                        }
                     case Role.Nurse:
                         int nurseCount = await _userRepo.CountNurse();
                         return nurseCount >= 10; // Limit to 10 nurses

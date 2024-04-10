@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240409085018_init")]
+    [Migration("20240410063309_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -95,6 +95,14 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("DoctorSpecialization");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Specialization = "BrainSurgery",
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("DataAccess_Layer.Models.User", b =>
@@ -154,58 +162,16 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             UserId = 1,
-                            Address = "123 Main St",
-                            DateOfBirth = new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Address = "15-16 Bacancy",
+                            DateOfBirth = new DateTime(2002, 4, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "archana.vyas@bacancy.com",
                             FirstName = "Archana",
                             LastName = "Vyas",
-                            Password = "password",
-                            PhoneNumber = "123-456-7890",
-                            PostalCode = "12345",
+                            Password = "5d7ad4424a19c1cbd4c8c1fe10d7fc344d5f3e40554d2d0ac842a83e06920a7f",
+                            PhoneNumber = "8401114826",
+                            PostalCode = "365541",
                             Role = "Doctor",
                             Sex = "Female"
-                        },
-                        new
-                        {
-                            UserId = 2,
-                            Address = "123 Main St",
-                            DateOfBirth = new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "parangi.rathod@bacancy.com",
-                            FirstName = "Parangi",
-                            LastName = "Rathod",
-                            Password = "password",
-                            PhoneNumber = "123-456-7890",
-                            PostalCode = "12345",
-                            Role = "Doctor",
-                            Sex = "Female"
-                        },
-                        new
-                        {
-                            UserId = 3,
-                            Address = "123 Main St",
-                            DateOfBirth = new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "khushbu.oza@bacancy.com",
-                            FirstName = "Khushbu",
-                            LastName = "Oza",
-                            Password = "password",
-                            PhoneNumber = "123-456-7890",
-                            PostalCode = "12345",
-                            Role = "Doctor",
-                            Sex = "Female"
-                        },
-                        new
-                        {
-                            UserId = 4,
-                            Address = "123 Main St",
-                            DateOfBirth = new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "kishan.prajapati@bacancy.com",
-                            FirstName = "Kishan",
-                            LastName = "Prajapati",
-                            Password = "password",
-                            PhoneNumber = "123-456-7890",
-                            PostalCode = "12345",
-                            Role = "Patient",
-                            Sex = "Male"
                         });
                 });
 

@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace DataAccessLayer.Migrations
 {
     /// <inheritdoc />
@@ -95,13 +93,12 @@ namespace DataAccessLayer.Migrations
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "UserId", "Address", "DateOfBirth", "Email", "FirstName", "LastName", "Password", "PhoneNumber", "PostalCode", "Role", "Sex" },
-                values: new object[,]
-                {
-                    { 1, "123 Main St", new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "archana.vyas@bacancy.com", "Archana", "Vyas", "password", "123-456-7890", "12345", "Doctor", "Female" },
-                    { 2, "123 Main St", new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "parangi.rathod@bacancy.com", "Parangi", "Rathod", "password", "123-456-7890", "12345", "Doctor", "Female" },
-                    { 3, "123 Main St", new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "khushbu.oza@bacancy.com", "Khushbu", "Oza", "password", "123-456-7890", "12345", "Doctor", "Female" },
-                    { 4, "123 Main St", new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "kishan.prajapati@bacancy.com", "Kishan", "Prajapati", "password", "123-456-7890", "12345", "Patient", "Male" }
-                });
+                values: new object[] { 1, "15-16 Bacancy", new DateTime(2002, 4, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "archana.vyas@bacancy.com", "Archana", "Vyas", "5d7ad4424a19c1cbd4c8c1fe10d7fc344d5f3e40554d2d0ac842a83e06920a7f", "8401114826", "365541", "Doctor", "Female" });
+
+            migrationBuilder.InsertData(
+                table: "DoctorSpecialization",
+                columns: new[] { "Id", "Specialization", "UserId" },
+                values: new object[] { 1, "BrainSurgery", 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppointmentDetails_DoctorId",

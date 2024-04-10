@@ -1,12 +1,12 @@
-C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\bin\Debug\net6.0\DataAccess_Layer.deps.json
-C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\bin\Debug\net6.0\DataAccess_Layer.runtimeconfig.json
-C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\bin\Debug\net6.0\DataAccess_Layer.dll
-C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\bin\Debug\net6.0\DataAccess_Layer.pdb
 C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\obj\Debug\net6.0\DataAccess_Layer.csproj.AssemblyReference.cache
 C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\obj\Debug\net6.0\DataAccess_Layer.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\obj\Debug\net6.0\DataAccess_Layer.AssemblyInfoInputs.cache
 C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\obj\Debug\net6.0\DataAccess_Layer.AssemblyInfo.cs
 C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\obj\Debug\net6.0\DataAccess_Layer.csproj.CoreCompileInputs.cache
+C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\bin\Debug\net6.0\DataAccess_Layer.deps.json
+C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\bin\Debug\net6.0\DataAccess_Layer.runtimeconfig.json
+C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\bin\Debug\net6.0\DataAccess_Layer.dll
+C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\bin\Debug\net6.0\DataAccess_Layer.pdb
 C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\obj\Debug\net6.0\DataAccess_Layer.dll
 C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\obj\Debug\net6.0\refint\DataAccess_Layer.dll
 C:\Users\a1\source\repos\Sterling_Hospital\DataAccess_Layer\obj\Debug\net6.0\DataAccess_Layer.pdb

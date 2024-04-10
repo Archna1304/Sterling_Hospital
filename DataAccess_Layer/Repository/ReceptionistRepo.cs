@@ -25,7 +25,7 @@ namespace DataAccess_Layer.Repository
 
         #region Check Doctors Availabilty
 
-        public async Task<bool> CheckDoctorAvailability(Specialization specialization, DateTime appointmentTime)
+        public async Task<bool> CheckDoctorAvailability(Specialization specialization, DateTime appointmentStartTime, DateTime appointmentEndTime)
         {
             try
             {
@@ -39,14 +39,13 @@ namespace DataAccess_Layer.Repository
                 }
 
                 int doctorId = doctorSpecialization.UserId;
+                // Check if the doctor has any overlapping appointments within the specified time range
+                bool overlappingAppointments = _context.AppointmentDetails
+                    .Any(a => a.ConsultingDoctor == doctorId.ToString() &&
+                        a.ScheduleStartTime <= appointmentEndTime && a.ScheduleEndTime >= appointmentStartTime);
 
-                // Check if the doctor has any overlapping appointments at the specified time
-                var appointments = await _context.AppointmentDetails
-                    .Where(a => a.ConsultingDoctor == doctorId.ToString() && a.ScheduleEndTime >= appointmentTime && a.ScheduleEndTime >= appointmentTime)
-                    .ToListAsync();
-
-                // If there are no appointments, the doctor is available
-                return !appointments.Any();
+                // If there are overlapping appointments, the doctor is not available
+                return overlappingAppointments;
             }
             catch (Exception)
             {
@@ -54,7 +53,6 @@ namespace DataAccess_Layer.Repository
                 return false;
             }
         }
-
 
         #endregion
 
@@ -95,6 +93,8 @@ namespace DataAccess_Layer.Repository
 
         #endregion
 
+        //for giving patient id
+
         #region Get Patient Number
         public async Task<int> GetNextPatientNumber()
         {
@@ -119,20 +119,28 @@ namespace DataAccess_Layer.Repository
 
         #endregion
 
-        #region Get PAtient Appointment
-        public async Task<List<AppointmentDetails>> GetPatientAppointments(int patientId, DateTime? appointmentDate = null)
+        #region Get Patient Appointment
+        public async Task<List<dynamic>> GetPatientAppointments(int patientId)
         {
             try
             {
-                IQueryable<AppointmentDetails> query = _context.AppointmentDetails.Where(a => a.PatientId == patientId);
-
-                if (appointmentDate.HasValue)
-                {
-                    query = query.Where(a => a.ScheduleStartTime.Date == appointmentDate.Value.Date);
-                }
-
-                var appointments = await query.ToListAsync();
-                return appointments;
+                return await _context.AppointmentDetails
+                    .Where(a => a.PatientId == patientId)
+                    .OrderByDescending(a => a.ScheduleStartTime)
+                    .Select(a => new 
+                    {
+                        patientName =a.Patient.FirstName + " " + a.Patient.LastName,
+                        gender = a.Patient.Sex.ToString(),
+                        phoneNumber = a.Patient.PhoneNumber,
+                        scheduleStartTime = a.ScheduleStartTime,
+                        scheduleEndTime = a.ScheduleEndTime,
+                        patientProblem = a.PatientProblem,
+                        description = a.Description,
+                        Status = a.Status.ToString(),
+                        doctorId = a.DoctorId,
+                        doctorSpecialization = a.ConsultingDoctor,
+                    })
+                    .ToListAsync<dynamic>();
             }
             catch (Exception)
             {

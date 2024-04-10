@@ -7,7 +7,7 @@ namespace Service_Layer.Interface
     {
         Task<ResponseDTO> ScheduleAppointment(AppointmentDTO appointmentDTO);
         Task<ResponseDTO> CreatePatientProfile(RegisterPatientDTO registerPatientDTO);
-        Task<List<AppointmentDetails>> GetPatientAppointments(int patientId, DateTime? appointmentDate = null);
+        Task<List<dynamic>> GetPatientAppointments(int patientId);
 
     }
 }

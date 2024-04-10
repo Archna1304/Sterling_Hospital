@@ -4,12 +4,12 @@ namespace DataAccess_Layer.Interface
 {
     public interface IReceptionistRepo
     {
-        Task<bool> CheckDoctorAvailability(Specialization specialization, DateTime appointmentTime);
+        Task<bool> CheckDoctorAvailability(Specialization specialization, DateTime appointmentStartTime, DateTime appointmentEndTime);
 
         Task<bool> ScheduleAppointment(AppointmentDetails appointmentDetails);
 
 
-        Task<List<AppointmentDetails>> GetPatientAppointments(int patientId, DateTime? appointmentDate = null);
+        Task<List<dynamic>> GetPatientAppointments(int patientId);
 
 
         Task<bool> CreatePatientProfile(User user);

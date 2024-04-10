@@ -159,14 +159,14 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             UserId = 1,
-                            Address = "123 Main St",
-                            DateOfBirth = new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Address = "15-16 Bacancy",
+                            DateOfBirth = new DateTime(2002, 4, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "archana.vyas@bacancy.com",
                             FirstName = "Archana",
                             LastName = "Vyas",
-                            Password = "password",
-                            PhoneNumber = "123-456-7890",
-                            PostalCode = "12345",
+                            Password = "5d7ad4424a19c1cbd4c8c1fe10d7fc344d5f3e40554d2d0ac842a83e06920a7f",
+                            PhoneNumber = "8401114826",
+                            PostalCode = "365541",
                             Role = "Doctor",
                             Sex = "Female"
                         });

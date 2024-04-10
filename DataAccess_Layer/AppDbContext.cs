@@ -63,12 +63,13 @@ namespace DataAccess_Layer
                     FirstName = "Archana",
                     LastName = "Vyas",
                     Email = "archana.vyas@bacancy.com",
-                    PhoneNumber = "123-456-7890",
-                    DateOfBirth = new DateTime(1980, 1, 1),
+                    PhoneNumber = "8401114826",
+                    DateOfBirth = new DateTime(2002, 04, 13),
                     Sex = Sex.Female,
-                    Address = "123 Main St",
-                    PostalCode = "12345",
-                    Password = "password",
+                    Address = "15-16 Bacancy",
+                    PostalCode = "365541",
+                    //use this to login Passwrod = "archana13"
+                    Password = "5d7ad4424a19c1cbd4c8c1fe10d7fc344d5f3e40554d2d0ac842a83e06920a7f",
                     Role = Role.Doctor
                 }
             );
@@ -82,23 +83,6 @@ namespace DataAccess_Layer
                     Specialization = Specialization.BrainSurgery
                 }
             );
-
-
-            //// Seed Appointments
-            //modelBuilder.Entity<AppointmentDetails>().HasData(
-            //    new AppointmentDetails
-            //    {
-            //        Id = 1,
-            //        PatientId = 4, // Linking to the User entity
-            //        ScheduleStartTime = DateTime.UtcNow,
-            //        ScheduleEndTime = DateTime.UtcNow.AddHours(1), // Example: 1 hour appointment
-            //        PatientProblem = "Accident induced damage",
-            //        Description = "Pain in hand & leg, SoreBody",
-            //        Status = Status.Scheduled,
-            //        ConsultingDoctor = Specialization.Physiotherapist.ToString(),
-            //        NurseId = 2
-            //    }
-            //);
         }
     }
 }
