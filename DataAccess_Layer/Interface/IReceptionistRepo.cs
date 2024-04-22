@@ -4,7 +4,7 @@ namespace DataAccess_Layer.Interface
 {
     public interface IReceptionistRepo
     {
-        Task<bool> CheckDoctorAvailability(Specialization specialization, DateTime appointmentStartTime, DateTime appointmentEndTime);
+        Task<bool> CheckDoctorAvailability(Specialization specialization, DateTime appointmentTime);
 
         Task<bool> ScheduleAppointment(AppointmentDetails appointmentDetails);
 

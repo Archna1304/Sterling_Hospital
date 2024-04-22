@@ -22,11 +22,13 @@ namespace DataAccess_Layer.Repository
         #region Get Doctor Appointments
         public async Task<List<dynamic>> GetDoctorAppointments(string specialization, int doctorId)
         {
+            // LINQ query to fetch appointments based on doctor's specialization and ID
             var appointments = await _context.AppointmentDetails
                 .Where(a => a.ConsultingDoctor == specialization && a.DoctorId == doctorId)
                 .OrderByDescending(a => a.ScheduleStartTime)
                 .Select(a => new
                 {
+                    // Projection to select specific fields for each appointment
                     patientId = "Sterling_" + a.Patient.UserId.ToString(),
                     patientName = a.Patient.FirstName + " " + a.Patient.LastName,
                     gender = a.Patient.Sex.ToString(),
@@ -47,7 +49,7 @@ namespace DataAccess_Layer.Repository
         #region Check Availability
         public async Task<bool> CheckAvailability(int doctorId, DateTime appointmentTime)
         {
-            // Your implementation to check availability in the database
+            // LINQ query to check if there are any overlapping appointments for the doctor at the given time
             return !(await _context.AppointmentDetails
                 .AnyAsync(a => a.DoctorId == doctorId && a.ScheduleStartTime <= appointmentTime && a.ScheduleEndTime >= appointmentTime));
         }
@@ -56,16 +58,19 @@ namespace DataAccess_Layer.Repository
         #region Reschedule Appointment
         public async Task<string> RescheduleAppointment(int appointmentId, DateTime newStartTime, DateTime newEndTime)
         {
+            // LINQ query to find the appointment by ID
             var appointment = await _context.AppointmentDetails.FindAsync(appointmentId);
             int patientId = appointment.PatientId;
             if (appointment != null)
             {
+                // Update appointment details
                 appointment.Status = Status.Rescheduled;
                 appointment.ScheduleStartTime = newStartTime;
                 appointment.ScheduleEndTime = newEndTime;
                 _context.Update(appointment);
                 await _context.SaveChangesAsync();
 
+                // Get patient's email
                 var patient = await _context.User.FirstOrDefaultAsync(u => u.UserId == patientId);
                 var email = patient.Email;
                 return email;
@@ -77,6 +82,7 @@ namespace DataAccess_Layer.Repository
         #region Get Appointment by ID
         public async Task<AppointmentDetails> GetAppointmentById(int appointmentId)
         {
+            // LINQ query to find the appointment by ID
             return await _context.AppointmentDetails.FindAsync(appointmentId);
         }
         #endregion
@@ -86,14 +92,17 @@ namespace DataAccess_Layer.Repository
         #region Cancel Appointment
         public async Task<string> CancelAppointment(int appointmentId)
         {
+            // LINQ query to find the appointment by ID
             var appointment = await _context.AppointmentDetails.FindAsync(appointmentId);
             int patientId = appointment.PatientId;
             if (appointment != null)
             {
+                // Update appointment status to "Cancelled"
                 appointment.Status = Status.Cancelled;
                 _context.Update(appointment);
                 await _context.SaveChangesAsync();
 
+                // Get patient's email
                 var patient = await _context.User.FirstOrDefaultAsync(u => u.UserId == patientId);
                 var email = patient.Email;
                 return email;
@@ -106,9 +115,11 @@ namespace DataAccess_Layer.Repository
         #region Assign Duty to Nurse
         public async Task<bool> AssignDutyToNurse(int appointmentId, int nurseId)
         {
+            // LINQ query to find the appointment by ID
             var appointment = await _context.AppointmentDetails.FindAsync(appointmentId);
             if (appointment != null)
             {
+                // Assign nurse to the appointment
                 appointment.NurseId = nurseId;
                 await _context.SaveChangesAsync();
                 return true;
@@ -160,6 +171,7 @@ namespace DataAccess_Layer.Repository
 
         public async Task<int> CountDoctorsBySpecialization(Specialization specialization)
         {
+            // Count the number of doctors with the specified specialization
             return await _context.DoctorSpecialization
                 .Where(ds => ds.Specialization == specialization)
                 .CountAsync();

@@ -26,7 +26,7 @@ namespace Sterling_Hospital.Controllers
         //Methods
 
         #region All Doctors Appointment
-        [HttpGet("AllAppointments")]
+        [HttpGet("Dashboard/AllAppointments")]
         public async Task<ActionResult<List<AppointmentDetails>>> GetDoctorAppointments(string specialization, int doctorId)
         {
             try
@@ -42,7 +42,7 @@ namespace Sterling_Hospital.Controllers
         #endregion
 
         #region Reschedule Appointment
-        [HttpPut("RescheduleAppointments")]
+        [HttpPut("Dashboard/RescheduleAppointments")]
         public async Task<ActionResult<ResponseDTO>> RescheduleAppointment(ChangeAppointmentDTO changeAppointmentDTO)
         {
             try
@@ -74,7 +74,7 @@ namespace Sterling_Hospital.Controllers
         #endregion
 
         #region Cancel Appointments
-        [HttpDelete("CancelAppointments/{appointmentId}")]
+        [HttpDelete("Dashboard/CancelAppointments/{appointmentId}")]
         public async Task<ActionResult<ResponseDTO>> CancelAppointment(int appointmentId)
         {
             var response = await _doctorService.CancelAppointment(appointmentId);

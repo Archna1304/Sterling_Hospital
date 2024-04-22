@@ -23,7 +23,7 @@ namespace Sterling_Hospital.Controllers
         //Methods
 
         #region Nurse Duties
-        [HttpGet("NurseDuties")]
+        [HttpGet("Dashboard/NurseDuties")]
         public async Task<ActionResult<List<AppointmentDetails>>> GetNurseDuties(int nurseId)
         {
             try

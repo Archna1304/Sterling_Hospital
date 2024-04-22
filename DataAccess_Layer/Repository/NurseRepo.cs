@@ -1,11 +1,5 @@
 ﻿using DataAccess_Layer.Interface;
-using DataAccess_Layer.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess_Layer.Repository
 {
@@ -28,11 +22,13 @@ namespace DataAccess_Layer.Repository
         #region Get Duties
         public async Task<List<dynamic>> GetNurseDuties(int nurseId)
         {
+            // LINQ query to fetch nurse duties based on nurse ID
             return await _context.AppointmentDetails
                 .Where(u => u.NurseId == nurseId)
                 .OrderByDescending(a => a.ScheduleStartTime)
                 .Select(u => new
                 {
+                    // Projection to select specific fields for each nurse duty
                     patientId = "Sterling_" + u.Patient.UserId.ToString(),
                     patientName = u.Patient.FirstName + " " + u.Patient.LastName,
                     gender = u.Patient.Sex.ToString(),

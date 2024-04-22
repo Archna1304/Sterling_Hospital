@@ -41,7 +41,7 @@ namespace DataAccess_Layer.Repository
         public async Task<User> LoginWithEmailOrPhoneNumber(string emailOrPhoneNumber, string password)
         {
             User user = null;
-
+            //checks if the input is in email format
             if (IsEmail(emailOrPhoneNumber))
             {
                 // Login with email

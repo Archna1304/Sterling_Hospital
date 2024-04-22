@@ -15,6 +15,7 @@ namespace DataAccess_Layer
         public DbSet<AppointmentDetails> AppointmentDetails { get; set; }
 
 
+        //Polymorphism
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configure enum to string conversion
@@ -45,12 +46,7 @@ namespace DataAccess_Layer
             .HasForeignKey(a => a.NurseId)
             .IsRequired(false);
 
-            //modelBuilder.Entity<AppointmentDetails>()
-            //.HasOne(a => a.Doctor)
-            //.WithMany(u => u.NurseId)
-            //.HasForeignKey(a => a.DoctorId)
-            //.IsRequired();
-
+           
             
 
             base.OnModelCreating(modelBuilder);

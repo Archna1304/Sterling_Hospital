@@ -25,7 +25,7 @@ namespace DataAccess_Layer.Repository
 
         #region Check Doctors Availabilty
 
-        public async Task<bool> CheckDoctorAvailability(Specialization specialization, DateTime appointmentStartTime, DateTime appointmentEndTime)
+        public async Task<bool> CheckDoctorAvailability(Specialization specialization, DateTime appointmentTime)
         {
             try
             {
@@ -41,11 +41,11 @@ namespace DataAccess_Layer.Repository
                 int doctorId = doctorSpecialization.UserId;
                 // Check if the doctor has any overlapping appointments within the specified time range
                 bool overlappingAppointments = _context.AppointmentDetails
-                    .Any(a => a.ConsultingDoctor == doctorId.ToString() &&
-                        a.ScheduleStartTime <= appointmentEndTime && a.ScheduleEndTime >= appointmentStartTime);
+                    .Any(a => a.DoctorId == doctorId &&
+                        a.ScheduleStartTime <= appointmentTime && a.ScheduleEndTime >= appointmentTime);
 
                 // If there are overlapping appointments, the doctor is not available
-                return overlappingAppointments;
+                return !overlappingAppointments;
             }
             catch (Exception)
             {
@@ -57,8 +57,10 @@ namespace DataAccess_Layer.Repository
         #endregion
 
         #region Check Patient
+        
         public async Task<bool> CheckPatient(string firstname, string email, DateTime dateofbirth)
         {
+            //checks if a patient exists based on the provided first name, email, and date of birth.
             bool check = await _context.User.AnyAsync(u => u.Email == email && u.DateOfBirth == dateofbirth && u.FirstName == firstname && u.Role == Role.Patient);
             return check;
 
@@ -69,6 +71,7 @@ namespace DataAccess_Layer.Repository
         #region Check Patient by Id
         public async Task<bool> CheckPatientById(int patientId)
         {
+            //checks if a patient exists based on the provided patient ID
             bool check = await _context.User.AnyAsync(u => u.UserId == patientId && u.Role == Role.Patient);
             return check;
         }
@@ -124,6 +127,7 @@ namespace DataAccess_Layer.Repository
         {
             try
             {
+                // Linq query to get patient appointment based on Id
                 return await _context.AppointmentDetails
                     .Where(a => a.PatientId == patientId)
                     .OrderByDescending(a => a.ScheduleStartTime)

@@ -113,8 +113,8 @@ namespace Service_Layer.Service
                 // Check doctor availability
                 bool doctorAvailable = await _receptionistRepo.CheckDoctorAvailability(
                     (Specialization)Enum.Parse(typeof(Specialization), appointmentDTO.ConsultingDoctor),
-                    appointmentDTO.ScheduleStartTime,
-                    appointmentDTO.ScheduleEndTime);
+                    appointmentDTO.ScheduleStartTime);
+                  
 
                 if (!doctorAvailable)
                 {

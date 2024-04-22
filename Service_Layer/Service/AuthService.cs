@@ -47,7 +47,7 @@ namespace Service_Layer.Service
                 var user = _mapper.Map<User>(registerDTO);
 
                 string passwordHash;
-                // Password For other roles (doctor, receptionist, nurse)
+                // Password For roles (receptionist, nurse)
                 passwordHash = CreatePasswordHash(registerDTO.Password);
 
                 // Check if the role is patient, and disallow registration
@@ -129,11 +129,8 @@ namespace Service_Layer.Service
                     }
                 }
 
-
                 // Register user
                 bool registered = await _authRepo.Register(user);
-
-               
 
                 if (registered)
                 {

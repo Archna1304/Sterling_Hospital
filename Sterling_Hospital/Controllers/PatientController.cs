@@ -24,7 +24,7 @@ namespace Sterling_Hospital.Controllers
         #region Current Appointments
 
         // GET: api/PatientAppointments/current/{patientId}
-        [HttpGet("CurrentAppointment/{patientId}")]
+        [HttpGet("Dashboard/CurrentAppointment/{patientId}")]
         public async Task<IActionResult> GetCurrentAppointment(int patientId)
         {
             var appointment = await _patientService.GetCurrentAppointment(patientId);
@@ -38,7 +38,7 @@ namespace Sterling_Hospital.Controllers
 
         #region Appointment History
         // GET: api/PatientAppointments/previous/{patientId}
-        [HttpGet("AppointmentHistory/{patientId}")]
+        [HttpGet("Dashboard/AppointmentHistory/{patientId}")]
         public async Task<IActionResult> GetPreviousAppointments(int patientId)
         {
             var appointments = await _patientService.GetPreviousAppointments(patientId);
